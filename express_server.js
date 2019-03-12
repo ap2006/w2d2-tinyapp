@@ -4,6 +4,10 @@ var PORT = 8080; //default port is 8080
 
 app.set("view engine", "ejs");
 
+function generateRandomString() {
+
+}
+
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
