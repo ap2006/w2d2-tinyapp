@@ -5,7 +5,7 @@ var PORT = 8080; //default port is 8080
 app.set("view engine", "ejs");
 
 function generateRandomString() {
-
+  return Math.random().toString(36).substring(2, 8);
 }
 
 var urlDatabase = {
@@ -29,8 +29,11 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console; this is also where you will find the submitted form data
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  // console.log(req.body);  // Log the POST request body to the console; this is also where you will find the submitted form data
+  const shortURL = generateRandomString(); // jkcjgk
+  urlDatabase[generateRandomString()] = req.body.longURL; // urlDatabase['jkcjgk'] = "http://whatever.com"
+  console.log('new db', urlDatabase)
+  res.redirect('/urls/' + shortURL); // '/urls/' + 'jkcjgk'
 });
 
 app.get("/hello", (req, res) => {
