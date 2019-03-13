@@ -18,6 +18,7 @@
           <li>
           <%= url %>
           <%= urls[url] %>
+          <form method="POST" action="/urls/<%= url %>/delete"><button>Delete</button></form>
           </li>
       <%  }   %>
       </ul>
