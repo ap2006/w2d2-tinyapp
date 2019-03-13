@@ -11,8 +11,10 @@
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
     <h1>ShortURL: <%= shortURL %></h1>
-    <form method="POST" action="/urls/<%= shortURL %>/"></form>
-  <input type = "text" value = "<%= longURL %>" size = "30"/><button>Update</button>
+    <form method="POST" action="/urls/<%= shortURL %>/">
+      <input type = "text" name = "longURL" value = "<%= longURL %>" size = "30"/>
+      <button type="submit">Update</button>
+    </form>
 
 </body>
 </html>
