@@ -27,7 +27,8 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = { username: req.cookies["username"] };
+  res.render("urls_new", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -78,6 +79,12 @@ app.post("/login", (req, res) => {
   console.log(req.body.username);
 
   res.cookie("username",newName)
+    res.redirect("/urls");
+});
+
+app.post("/logout", (req, res) => {
+
+  res.clearCookie("username")
     res.redirect("/urls");
 });
 

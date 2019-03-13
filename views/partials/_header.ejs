@@ -6,4 +6,11 @@
   <button type="submit">Sign in</button>
 </form>
 
-<div><b><%= username %></b></div>
+  <% if(username){ %>
+    <text>"Logged In As:"<%= username %></text>
+    <form action="/logout" method="POST">
+        <button name="foo" value="Logout">Logout</button>
+    </form>
+   <% } else{ %>
+
+  <% } %>
