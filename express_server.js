@@ -1,7 +1,9 @@
 var express = require("express");
+var cookieParser = require('cookie-parser')
 var app = express();
 var PORT = 8080; //default port is 8080
 
+app.use(cookieParser())
 app.set("view engine", "ejs");
 
 function generateRandomString() {
@@ -70,6 +72,15 @@ app.post("/urls/:id", (req, res) => {
   urlDatabase[req.params.id] = newURL
     res.redirect("/urls");
 });
+
+app.post("/login", (req, res) => {
+  let newName = req.body.username
+  console.log(req.body.username);
+
+  res.cookie("username",newName)
+    res.redirect("/urls");
+});
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
