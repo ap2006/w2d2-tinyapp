@@ -6,12 +6,13 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <title>TinyApp</title>
+  <title>Short URL</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-  <% include partials/_header %>
     <!-- Add EJS code here -->
-    <a href="#">Create New Tinyurl</a>
-    <%= longURL %> = <%= shortURL %>
+    <h1>ShortURL: <%= shortURL %></h1>
+    <form method="POST" action="/urls/<%= shortURL %>/"></form>
+  <input type = "text" value = "<%= longURL %>" size = "30"/><button>Update</button>
+
 </body>
 </html>
