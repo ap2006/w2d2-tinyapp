@@ -15,6 +15,33 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+// const createUser = (email, password) => {
+//   const id = nextId++;
+//   const newUser = {
+//     id: id,
+//     email: email,
+//     password: password
+//   };
+//
+//   users[id] = newUser;
+//   return newUser;
+// };
+
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+
+console.log(users);
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -90,6 +117,22 @@ app.post("/logout", (req, res) => {
 
 app.get("/register", (req, res) => {
   res.render("register");
+});
+
+app.post("/register", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const id = generateRandomString();
+
+  if (!email || !password ) {
+    res.redirect("/register");
+    return;
+  }
+  users[id] = {id: id, email: email, password: password}
+
+  console.log("registered user", users);
+  res.cookie("username",id)
+    res.redirect("/urls");
 });
 
 
