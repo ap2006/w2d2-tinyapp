@@ -125,9 +125,19 @@ app.post("/register", (req, res) => {
   const id = generateRandomString();
 
   if (!email || !password ) {
-    res.redirect("/register");
+    res.send(400);
     return;
   }
+//below you are adding in a check that says if an email already is registered, return a 400 with a message saying it's already taken
+  for (var userId in users) {
+    if (req.body.email === users[userId].email) {
+      res.status(400).send("Email is already registered");
+      return;
+    }
+  }
+
+
+
   users[id] = {id: id, email: email, password: password}
 
   console.log("registered user", users);
