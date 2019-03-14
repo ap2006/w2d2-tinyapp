@@ -108,11 +108,27 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  let newName = req.body.username
-  console.log(req.body.username);
+  const email = req.body.email;
+  const password = req.body.password;
 
-  res.cookie("user_id",newName)
-    res.redirect("/urls");
+  if (!email || !password ) {
+    res.send(400);
+    return;
+  }
+//below you are adding in a check that says if an email already is registered, return a 400 with a message saying it's already taken
+  for (var userId in users) {
+    if (email === users[userId].email) {
+      if (password === users[userId].password) {
+        res.cookie("user_id", userId)
+        res.redirect("/urls");
+        return;
+      } else {
+        res.status(403).send("Password doesn't match");
+        return;
+      }
+    }
+  }
+  res.status(403).send("Email does not exist");
 });
 
 app.post("/logout", (req, res) => {
@@ -141,9 +157,6 @@ app.post("/register", (req, res) => {
       return;
     }
   }
-
-
-
   users[id] = {id: id, email: email, password: password}
 
   console.log("registered user", users);
