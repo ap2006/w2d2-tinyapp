@@ -6,8 +6,8 @@
   <button type="submit">Sign in</button>
 </form>
 
-  <% if(username){ %>
-    <text>"Logged In As:"<%= username %></text>
+  <% if(user){ %>
+    <text>"Logged In As:"<%= user.email %></text>
     <form action="/logout" method="POST">
         <button name="foo" value="Logout">Logout</button>
     </form>

@@ -54,7 +54,8 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies["username"] };
+  let user_id = req.cookies.user_id
+  let templateVars = { user: users[user_id] };
   res.render("urls_new", templateVars);
 });
 
@@ -71,7 +72,8 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, username: req.cookies["username"] };
+  let user_id = req.cookies.user_id
+  let templateVars = { urls: urlDatabase, user: users[user_id] };
   res.render("urls_index", templateVars);
 });
 
@@ -100,21 +102,25 @@ app.post("/urls/:id", (req, res) => {
   urlDatabase[req.params.id] = newURL
     res.redirect("/urls");
 });
+//Login
+app.get("/login", (req, res) => {
+  res.render("login");
+});
 
 app.post("/login", (req, res) => {
   let newName = req.body.username
   console.log(req.body.username);
 
-  res.cookie("username",newName)
+  res.cookie("user_id",newName)
     res.redirect("/urls");
 });
 
 app.post("/logout", (req, res) => {
 
-  res.clearCookie("username")
+  res.clearCookie("user_id")
     res.redirect("/urls");
 });
-
+//Register
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -141,7 +147,7 @@ app.post("/register", (req, res) => {
   users[id] = {id: id, email: email, password: password}
 
   console.log("registered user", users);
-  res.cookie("username",id)
+  res.cookie("user_id",id)
     res.redirect("/urls");
 });
 
