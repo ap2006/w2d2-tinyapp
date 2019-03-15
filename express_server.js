@@ -9,19 +9,7 @@ app.set("view engine", "ejs");
 function generateRandomString() {
   return Math.random().toString(36).substring(2, 8);
 }
-
 var urlDatabase = {};
-
-//   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "aadf" },
-//   "9sm5xK": { longURL: "http://www.google.com", userID: "aadf" }
-// };
-// console.log(urlDatabase);
-
-// var urlDatabase = {
-//   "b2xVn2": "http://www.lighthouselabs.ca",
-//   "9sm5xK": "http://www.google.com"
-// }; before code
-
 // const createUser = (email, password) => {
 //   const id = nextId++;
 //   const newUser = {
@@ -47,15 +35,17 @@ const users = {
   }
 }
 
-console.log(users);
+// console.log(users);
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+//localhost page welcome message
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+//urls.json
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
