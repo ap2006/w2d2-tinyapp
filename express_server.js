@@ -141,11 +141,17 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post("/urls/:id", (req, res) => {
   // modify longURL
-  console.log("IS THSI UPDATE???")
-  let newURL = req.body.longURL
-  console.log(req.body.longURL);
-  urlDatabase[req.params.id].longURL = newURL
+  let user_id = req.cookies.user_id
+  if (!user_id) {
+    res.redirect("/login/");
+  }
+  else {
+    var userURLs = urlsForUser(user_id);
+    if (userURLs[req.params.shortURL]) {
+      urlDatabase[req.params.id].longURL = req.body.longURL;
+    }
     res.redirect("/urls");
+  }
 });
 //Login
 app.get("/login", (req, res) => {
