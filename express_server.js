@@ -3,6 +3,8 @@ var cookieParser = require('cookie-parser')
 var app = express();
 var PORT = 8080; //default port is 8080
 
+const bcrypt = require('bcrypt');
+
 app.use(cookieParser())
 app.set("view engine", "ejs");
 
@@ -170,7 +172,8 @@ app.post("/login", (req, res) => {
 //below you are adding in a check that says if an email already is registered, return a 400 with a message saying it's already taken
   for (var userId in users) {
     if (email === users[userId].email) {
-      if (password === users[userId].password) {
+      // if (password === users[userId].password) {
+      if (bcrypt.compareSync(password, users[userId].password)) {
         res.cookie("user_id", userId)
         res.redirect("/urls");
         return;
@@ -196,6 +199,7 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10);
   const id = generateRandomString();
 
   if (!email || !password ) {
@@ -209,7 +213,7 @@ app.post("/register", (req, res) => {
       return;
     }
   }
-  users[id] = {id: id, email: email, password: password}
+  users[id] = {id: id, email: email, password: hashedPassword}
 
   console.log("registered user", users);
   res.cookie("user_id",id)
