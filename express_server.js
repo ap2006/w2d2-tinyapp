@@ -10,10 +10,17 @@ function generateRandomString() {
   return Math.random().toString(36).substring(2, 8);
 }
 
-var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
+var urlDatabase = {};
+
+//   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "aadf" },
+//   "9sm5xK": { longURL: "http://www.google.com", userID: "aadf" }
+// };
+// console.log(urlDatabase);
+
+// var urlDatabase = {
+//   "b2xVn2": "http://www.lighthouselabs.ca",
+//   "9sm5xK": "http://www.google.com"
+// }; before code
 
 // const createUser = (email, password) => {
 //   const id = nextId++;
@@ -66,7 +73,7 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
   // console.log(req.body);  // Log the POST request body to the console; this is also where you will find the submitted form data
   const shortURL = generateRandomString(); // jkcjgk
-  urlDatabase[generateRandomString()] = req.body.longURL; // urlDatabase['jkcjgk'] = "http://whatever.com"
+  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.cookies.user_id}; // urlDatabase['jkcjgk'] = "http://whatever.com"
   console.log('new db', urlDatabase)
   res.redirect('/urls/' + shortURL); // '/urls/' + 'jkcjgk'
 });
@@ -82,7 +89,7 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]/* What goes here? */ };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL};
   res.render("urls_show", templateVars);
 });
 
