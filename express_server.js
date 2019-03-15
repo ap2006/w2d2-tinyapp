@@ -110,7 +110,7 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  console.log("WE ARE HERE <===============")
+  // console.log("WE ARE HERE <===============")
 
   console.log(urlDatabase);
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL};
@@ -118,7 +118,8 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].longURL;
+  console.log("hello");
   res.redirect(longURL);
 });
 
@@ -147,7 +148,7 @@ app.post("/urls/:id", (req, res) => {
   }
   else {
     var userURLs = urlsForUser(user_id);
-    if (userURLs[req.params.shortURL]) {
+    if (userURLs[req.params.id]) {
       urlDatabase[req.params.id].longURL = req.body.longURL;
     }
     res.redirect("/urls");
