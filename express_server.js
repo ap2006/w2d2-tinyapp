@@ -61,6 +61,8 @@ const users = {
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+//Add routes here
+
 //localhost page welcome message
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -71,6 +73,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+//lists new urls if logged in, if not redirects to login page
 app.get("/urls/new", (req, res) => {
   let user_id = req.cookies.user_id
   if (!user_id) {
@@ -81,6 +84,7 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
+//shows list of updated urls with shortURL
 app.post("/urls", (req, res) => {
   // console.log(req.body);  // Log the POST request body to the console; this is also where you will find the submitted form data
   const shortURL = generateRandomString(); // jkcjgk
@@ -89,10 +93,12 @@ app.post("/urls", (req, res) => {
   res.redirect('/urls/' + shortURL); // '/urls/' + 'jkcjgk'
 });
 
+//my local host root page with a Hello message
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+//show urls page if user is logged in show with the urls associated with their id. it not, take them to urls page
 app.get("/urls", (req, res) => {
   let user_id = req.cookies.user_id
   if (!user_id) {
@@ -101,7 +107,8 @@ app.get("/urls", (req, res) => {
   }
   else {
     var userURLs = urlsForUser(user_id);
-  // console.log(url);
+  //please leave this code here I like to have it to refer back to thank you
+  //console.log(url);
   // console.log(urlDatabase[url].longURL, urlDatabase[url].userID);
   // console.log(urlDatabase[url].userID == user_id);
   //this step above says if userID is associated with a cookie return true for the long url
@@ -110,15 +117,16 @@ app.get("/urls", (req, res) => {
   }
 
 });
-
+//show the shortened url page that you can update if you wish and are logged in
 app.get("/urls/:shortURL", (req, res) => {
+//I console log things to keep testing throughout. Please leave in although I know it's not best practice
   // console.log("WE ARE HERE <===============")
-
-  console.log(urlDatabase);
+  // console.log(urlDatabase);
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL};
   res.render("urls_show", templateVars);
 });
 
+//
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL;
   console.log("hello");
