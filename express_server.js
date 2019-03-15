@@ -9,7 +9,26 @@ app.set("view engine", "ejs");
 function generateRandomString() {
   return Math.random().toString(36).substring(2, 8);
 }
-var urlDatabase = {};
+
+function urlsForUser(id) {
+  let userURLs = {};
+  for (var url in urlDatabase) {
+    if  (urlDatabase[url].userID == id) {
+      userURLs[url] = urlDatabase[url]
+    }
+  }
+  return userURLs
+}
+
+var urlDatabase = {
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "userRandomID" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "user2RandomID" }
+};
+
+// var userURLs = {
+//   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "userRandomID" },
+//
+// };
 // const createUser = (email, password) => {
 //   const id = nextId++;
 //   const newUser = {
@@ -74,11 +93,26 @@ app.get("/hello", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let user_id = req.cookies.user_id
-  let templateVars = { urls: urlDatabase, user: users[user_id] };
-  res.render("urls_index", templateVars);
+  if (!user_id) {
+    let templateVars = { urls: {}, user: users[user_id] };
+    res.render("urls_index", templateVars);
+  }
+  else {
+    var userURLs = urlsForUser(user_id);
+  // console.log(url);
+  // console.log(urlDatabase[url].longURL, urlDatabase[url].userID);
+  // console.log(urlDatabase[url].userID == user_id);
+  //this step above says if userID is associated with a cookie return true for the long url
+    let templateVars = { urls: userURLs, user: users[user_id] };
+    res.render("urls_index", templateVars);
+  }
+
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+  console.log("WE ARE HERE <===============")
+
+  console.log(urlDatabase);
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL};
   res.render("urls_show", templateVars);
 });
@@ -89,18 +123,28 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  let deletedURL = [req.params.shortURL];
-  // console.log(deletedURL); logging each step so I can remember what I did
-  delete urlDatabase[deletedURL];
-  //The reason we use urlDatabase[deletedURL] and not delete urlDatabase.deletedURL is because we can't pass a variable in a previously defined object
+  // console.log("AM I DELETING INSTEAD OF UPDATING//");
+  let user_id = req.cookies.user_id
+  if (!user_id) {
+    res.redirect("/login/");
+  }
+  else {
+    var userURLs = urlsForUser(user_id);
+    if (userURLs[req.params.shortURL]) {
+      delete urlDatabase[req.params.shortURL];
+    }
     res.redirect("/urls");
+  }
+  //The reason we use urlDatabase[deletedURL] and not delete urlDatabase.deletedURL is because we can't pass a variable in a previously defined object
+
 });
 
 app.post("/urls/:id", (req, res) => {
   // modify longURL
+  console.log("IS THSI UPDATE???")
   let newURL = req.body.longURL
   console.log(req.body.longURL);
-  urlDatabase[req.params.id] = newURL
+  urlDatabase[req.params.id].longURL = newURL
     res.redirect("/urls");
 });
 //Login
