@@ -5,8 +5,11 @@ TinyApp is a full stack web application built with Node and Express that allows 
 ## Final Product
 
 ![Main page before Login or Register] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/startup_page.png)
+
 ![Logged in page] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/urls_logged_in_page.png)
+
 ![Page showing a shortened URL] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/short_url_page.png)
+
 ![List of created URLs for logged in user] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/url_list_page.png)
 
 
