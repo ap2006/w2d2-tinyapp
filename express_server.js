@@ -1,7 +1,7 @@
 var express = require("express");
 var cookieSession = require('cookie-session')
 var app = express();
-var PORT = 8080; //default port is 8080
+var PORT = 8080;
 
 const bcrypt = require('bcrypt');
 
@@ -9,8 +9,8 @@ app.use(cookieSession({
   name: 'session',
   keys: ["abghjk"],
 
-  // Cookie Options
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+
+  maxAge: 24 * 60 * 60 * 1000
 }))
 app.set("view engine", "ejs");
 
@@ -33,22 +33,6 @@ var urlDatabase = {
   i3BoGr: { longURL: "https://www.google.ca", userID: "user2RandomID" }
 };
 
-// var userURLs = {
-//   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "userRandomID" },
-//
-// };
-// const createUser = (email, password) => {
-//   const id = nextId++;
-//   const newUser = {
-//     id: id,
-//     email: email,
-//     password: password
-//   };
-//
-//   users[id] = newUser;
-//   return newUser;
-// };
-
 const users = {
   "userRandomID": {
     id: "userRandomID",
@@ -61,8 +45,6 @@ const users = {
     password: "dishwasher-funk"
   }
 }
-
-// console.log(users);
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -92,11 +74,10 @@ app.get("/urls/new", (req, res) => {
 
 //shows list of updated urls with shortURL
 app.post("/urls", (req, res) => {
-  // console.log(req.body);  // Log the POST request body to the console; this is also where you will find the submitted form data
-  const shortURL = generateRandomString(); // jkcjgk
-  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.session.user_id}; // urlDatabase['jkcjgk'] = "http://whatever.com"
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.session.user_id};
   console.log('new db', urlDatabase)
-  res.redirect('/urls/' + shortURL); // '/urls/' + 'jkcjgk'
+  res.redirect('/urls/' + shortURL);
 });
 
 //my local host root page with a Hello message
@@ -113,21 +94,14 @@ app.get("/urls", (req, res) => {
   }
   else {
     var userURLs = urlsForUser(user_id);
-  //please leave this code here I like to have it to refer back to thank you
-  //console.log(url);
-  // console.log(urlDatabase[url].longURL, urlDatabase[url].userID);
-  // console.log(urlDatabase[url].userID == user_id);
-  //this step above says if userID is associated with a cookie return true for the long url
     let templateVars = { urls: userURLs, user: users[user_id] };
     res.render("urls_index", templateVars);
   }
 
 });
+
 //show the shortened url page that you can update if you wish and are logged in
 app.get("/urls/:shortURL", (req, res) => {
-//I console log things to keep testing throughout. Please leave in although I know it's not best practice
-  // console.log("WE ARE HERE <===============")
-  // console.log(urlDatabase);
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL};
   res.render("urls_show", templateVars);
 });
@@ -135,13 +109,11 @@ app.get("/urls/:shortURL", (req, res) => {
 //with the newly created short url redirect user to the page with the long url saved in the short url
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL;
-  // console.log("hello");
   res.redirect(longURL);
 });
 
-//
+//for the delete page for deleting urls, only show associated urls to the owner. if user does not exist, take them to login page
 app.post("/urls/:shortURL/delete", (req, res) => {
-  // console.log("AM I DELETING INSTEAD OF UPDATING//");
   let user_id = req.session.user_id
   if (!user_id) {
     res.redirect("/login/");
@@ -153,12 +125,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     }
     res.redirect("/urls");
   }
-  //The reason we use urlDatabase[deletedURL] and not delete urlDatabase.deletedURL is because we can't pass a variable in a previously defined object
-
 });
 
+//show urls belonging to user
 app.post("/urls/:id", (req, res) => {
-  // modify longURL
   let user_id = req.session.user_id
   if (!user_id) {
     res.redirect("/login/");
@@ -171,11 +141,13 @@ app.post("/urls/:id", (req, res) => {
     res.redirect("/urls");
   }
 });
-//Login
+
+//Login page
 app.get("/login", (req, res) => {
   res.render("login");
 });
 
+//if your login works, go to the urls page. If your password doesn't match the email, you get a 403.
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -184,7 +156,6 @@ app.post("/login", (req, res) => {
     res.send(400);
     return;
   }
-//below you are adding in a check that says if an email already is registered, return a 400 with a message saying it's already taken
   for (var userId in users) {
     if (email === users[userId].email) {
       // if (password === users[userId].password) {
@@ -201,12 +172,14 @@ app.post("/login", (req, res) => {
   res.status(403).send("Email does not exist");
 });
 
+//Logout page.
 app.post("/logout", (req, res) => {
 
   req.session = null
     res.redirect("/urls");
 });
-//Register
+
+//Register page
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -221,6 +194,7 @@ app.post("/register", (req, res) => {
     res.send(400);
     return;
   }
+
 //below you are adding in a check that says if an email already is registered, return a 400 with a message saying it's already taken
   for (var userId in users) {
     if (req.body.email === users[userId].email) {
@@ -235,7 +209,7 @@ app.post("/register", (req, res) => {
     res.redirect("/urls");
 });
 
-
+//server running
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
