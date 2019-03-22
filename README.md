@@ -4,13 +4,27 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-![Main page before Login or Register] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/startup_page.png)
+Main page before Login or Register:
 
-![Logged in page] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/urls_logged_in_page.png)
+![alt tag](https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/startup_page.png)
 
-![Page showing a shortened URL] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/short_url_page.png)
 
-![List of created URLs for logged in user] (https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/url_list_page.png)
+
+Logged in Page:
+
+![alt tag](https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/urls_logged_in_page.png)
+
+
+
+Page showing a shortened URL:
+
+![alt tag](https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/short_url_page.png)
+
+
+
+List of created URLs for logged in user:
+
+![alt tag](https://github.com/ap2006/w2d2-tinyapp/blob/master/docs/url_list_page.png)
 
 
 ## Dependencies
@@ -21,11 +35,11 @@ TinyApp is a full stack web application built with Node and Express that allows 
 - body-parser
 - cookie-session
 
-##Getting Started 
+## Getting Started 
 
 - Install all dependencies using the `npm install` command
 - Run the development web server using the `node express_server.js`
 
-##Using TinyApp
+## Using TinyApp
 - In a web browser, open up a new window. Enter localhost:8080/urls and register for an account
 - Click 'Create Tiny URL' once you're successfully logged in. From there, you can put a lon URL into the box and shorten it.
