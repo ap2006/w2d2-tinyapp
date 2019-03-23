@@ -53,7 +53,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 //localhost page welcome message
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  res.redirect("/urls");
+  // res.send("Hello!"); initially put this
 });
 
 //urls.json
@@ -83,9 +84,9 @@ app.post("/urls", (req, res) => {
 //my local host root page with a Hello message
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
+})
 
-//show urls page if user is logged in show with the urls associated with their id. it not, take them to urls page
+// show urls page if user is logged in show with the urls associated with their id. it not, take them to urls page
 app.get("/urls", (req, res) => {
   let user_id = req.session.user_id
   if (!user_id) {
@@ -97,11 +98,22 @@ app.get("/urls", (req, res) => {
     let templateVars = { urls: userURLs, user: users[user_id] };
     res.render("urls_index", templateVars);
   }
-
 });
 
 //show the shortened url page that you can update if you wish and are logged in
 app.get("/urls/:shortURL", (req, res) => {
+  // check that url exists in urlDatabase
+  let url = urlDatabase[req.params.shortURL]
+  let user_id = req.session.user_id
+
+  if (!user_id) {
+    res.redirect("/login/");
+  }
+  if (!url || user_id != url.userID) {
+    res.status(403).send("Sorry you don't own that URL, you must register or login");
+  }
+
+  // make sure user in session is owner of url
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL};
   res.render("urls_show", templateVars);
 });
@@ -127,7 +139,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   }
 });
 
-//show urls belonging to user
+
 app.post("/urls/:id", (req, res) => {
   let user_id = req.session.user_id
   if (!user_id) {
